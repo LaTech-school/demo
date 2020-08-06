@@ -1,0 +1,10 @@
+#content {
+    border: 1px solid #333;
+    margin: 10px;
+    padding: 20px;
+}
+
+article {
+    border: 1px solid #CCC;
+    margin-bottom: 20px;
+}

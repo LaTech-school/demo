@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "logo": "https://www.iconarchive.com/download/i109476/cjdowner/cryptocurrency-flat/Bitcoin-BTC.ico"
+    },
+    {
+        "name": "Litecoin",
+        "symbol": "LTC",
+        "logo": "https://www.bitladon.fr/img/currency/LTC_groot.png"
+    },
+    {
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "logo": "https://lh3.googleusercontent.com/proxy/vf-JfGTZ8wlz7DDkBx8lh2aZeLE2X6jj5qa8PLxVImXgUgFWKf3UHMLqMuE0K0GouwdZKCAe4hhYXb4WzTVdNTIq5Xpj"
+    },
+    {
+        "name": "Basic Attention Token",
+        "symbol": "BAT",
+        "logo": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0D8775F648430679A709E98d2b0Cb6250d2887EF/logo.png"
+    },
+    {
+        "name": "Chainlink",
+        "symbol": "LINK",
+        "logo": "https://blog.chain.link/content/images/2019/01/190115-chainlink-icon.png"
+    }
+]
