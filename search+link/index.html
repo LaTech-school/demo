@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search + Autocomplete</title>
+
+    <style>
+    /* Par défaut, on cache la liste de suggestion */
+    #crypto {
+        display: none;
+    }
+    </style>
+</head>
+<body>
+    
+    <h2>Crypto <span></span></h2>
+
+    <form>
+
+        <!-- Champ de recherche -->
+        <input list="crypto" type="search" id="search">
+
+        <!-- Liste de suggestions -->
+        <ul id="crypto"></ul>
+
+    </form>
+
+
+    <div id="content"></div>
+
+
+    <!-- Scripts -->
+    <script src="./assets/js/jquery-3.5.1.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+
+        // Ciblage de l'élément <input id="search">
+        $input = $('#search');
+        $title = $('h2 span');
+        $content = $('#content');
+
+        // Ciblage de l'élément <ul>
+        $ul = $('ul#crypto');
+
+        // Quand l'utilisateur relache une touche du clavier sur le champ <input id="search">
+        $input.on('keyup', search);
+
+        // Quand on efface la recherche
+        $input.on('search', search);
+
+
+        function search(){
+
+            // Recupération de la valeur saisie
+            $inputText = $(this).val();
+
+            // Récupération du fichier "data.json" avec AJAX
+            $.getJSON("./assets/data/data.json")
+
+            // Lorsque AJAX répond, on récupère la reponse dans la variable "response"
+            .done(function(response){
+
+                // Reset de <ul>
+                $ul.html('');
+
+                // cette condition permet d'afficher les suggestions UNIQUEMENT si une valeur est saisie dans le champ de recherche
+                if ($inputText.length > 0) 
+                {
+                    $ul.show();
+
+                    // "Response" correspond au tableau du fichier "data.json"
+                    // On boucle sur "response" et on récupère les objets correspondant à chaque cryptomonnaie dans la variable "item"
+                    $(response).each(function(index, item) {
+
+                        // "item" correspond un un objet concernant une crypto
+                        // Recupération du symbole d'un crypto
+                        // ex: item.symbol
+
+                        // Récupération du nom d'une crypto
+                        // ex: item.name
+
+
+                        // Définition de l'expression régulière basée sur la saisie de l'utilisateur
+                        let re = new RegExp($inputText, "gi");
+
+                        // On test et affiche le nom de la crypto SI le nom de la crypto contien le motif saisie par l'utilisateur
+                        if (re.test(item.name))
+                        {
+                            // Creation du lien <a>
+                            $a = $('<a>')
+                                .attr("href", `?crypto=${item.symbol}`)
+                                .html( item.name );
+
+                            // creation de <li>
+                            $li = $('<li>').append($a);
+
+                            // Inject de <li> dans <ul>
+                            $ul.append($li);
+                        }
+                    });
+                }
+
+                else {
+                    $ul.hide();
+                }
+            })
+        }
+
+
+
+        // Recupération de l'url
+        $href = window.location.href;
+
+        // Recupération des paramètres de l'url
+        $x = $href.split('?');
+
+        // Convertion de la chaine des paramètres en tableau
+        $params = $x[1].split('&');
+
+        // Boucle sur le tableau des paramètres
+        $($params).each(function(index, param){
+            
+            // Décomposition du paramètre
+            param = param.split('=');
+
+            // Récup. Nom du paramètre
+            let key = param[0];
+
+            // Récup. Valeur du paramètre
+            let val = param[1];
+
+            // Filtre des paramètres UNIQUEMENT si le nom est "crypto"
+            if (key === "crypto")
+            {
+                // Injection de la valeur dans le titire
+                $title.html(val);
+
+                // Récupération des données
+                $.getJSON("./assets/data/data.json").done(function(response){
+
+                    // Boucle sur la liste des données
+                    $(response).each(function(index, item){
+
+                        // Filtre les données
+                        // Uniquement si la valeur de la propriété "symbol" correspond a la valeur du paramètre "crypto"
+                        if (item.symbol === val)
+                        {
+
+                            // Personnalisation de la page
+                            $img = $('<img>').attr('src', item.logo)
+                            $content.append($img);
+
+                        }
+
+                    });
+
+                });
+            }
+
+        });
+    });
+
+    </script>
+    
+</body>
+</html>
