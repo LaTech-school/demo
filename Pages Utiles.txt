@@ -1,0 +1,23 @@
+Homepage
+Qui sommes nous ? (phylosophie, services, membres)
+Contact (formulaire + coordonnées + carte (googlemap))
+Feedback
+F.A.Q.
+Services
+Legales - Mentions légale
+        - Condition de vente
+        - Condition d'utilisation
+        - CLUF
+        - Politique de confidentialité
+
+Creation de compte
+Connexion
+Mot de passe oublié
+
+Page de profile
+Page préférences
+
+Page des produits (liste avec pagination)
+Pages de détails du produit
+
+Google Analytics
