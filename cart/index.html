@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+
+    <!-- Nbre article du panier -->
+    <div>Mon panier (<span id="cart-lenght"></span>)</div>
+    <div><span id="cart-total"></span> &euro;</div>
+    
+    <hr>
+
+    <!-- Affichage du catalogue -->
+    <div id="catalog"></div>
+
+    <!-- Modele d'article -->
+    <template>
+        <article>
+            <h3>{{ name }}</h3>
+            <input type="number" name="product-{{ id }}-qty" value="1" min="1" max="{{ stock }}">
+            <button type="button" data-product="{{ id }}">Ajouter au panier</button>
+        </article>
+    </template>
+
+
+
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+
+        // Tableau d'article du panier
+        // name
+        // price
+        // qty
+        // total
+        var cart = [];
+    
+        // Nbre d'article du panier
+        var cartLen = 0;
+
+        var total = 0;
+
+        $(document).ready(function() {
+
+            $catalog = $('#catalog');
+            $tmpl = $('template');
+        
+            // Au chargement de la page...
+            // --
+        
+            // Affichage du nombre de produit dans le panier
+            setCartLen();
+            setCartTotal();
+        
+            // Affichage du catalogue
+            getProducts();
+
+        });
+
+        // MAJ du panier (nbre produits)
+        function setCartLen()
+        {
+            $('#cart-lenght').html(cartLen);
+        }
+        function setCartTotal()
+        {
+            $('#cart-total').html(total);
+        }
+
+        function cartLog() 
+        {
+            console.log("CART LOG :");
+            console.log(cartLen);
+            console.log(cart);
+        }
+
+        function getProducts() {
+            // Recup de la liste des produits
+            $.getJSON("data.json").done(function(r){
+
+                // Boucle sur la liste des produits
+                // Puis affichage dans la page HTML
+                $(r).each(function(index, product){
+                    $tmplHtml = $tmpl.html();
+
+                    $tmplHtml = $tmplHtml.replace('{{ name }}', product.name);
+                    $tmplHtml = $tmplHtml.replace('{{ id }}', product.id); // Utilise les regex
+                    $tmplHtml = $tmplHtml.replace('{{ id }}', product.id);
+                    $tmplHtml = $tmplHtml.replace('{{ stock }}', product.stock);
+
+                    $catalog.append($tmplHtml);
+                });
+
+
+                // Click sur le bouton "ajouter au panier"
+                $('button').on('click', function(){
+
+                    // Recup de la valeur "data-product" du bouton
+                    $productID = $(this).data('product');
+
+                    // Quantity
+                    $qtyName = `product-${$productID}-qty`;
+                    $inputQty = $(`[name=${$qtyName}]`);
+                    $qty = parseInt($inputQty.val());
+
+                    $(r).each(function(index, product){
+                        if(product.id == $productID) 
+                        {
+
+                            subTotal = product.price * $qty;
+
+                            cart.push({
+                                name: product.name,
+                                price: product.price,
+                                qty: $qty,
+                                subTotal: subTotal
+                            });
+
+                            total += subTotal
+                            cartLen += $qty;
+
+                            cartLog();
+                            setCartLen();
+                            setCartTotal();
+                        }
+                    });
+
+                });
+
+            });
+        }
+
+
+    </script>
+</body>
+</html>
